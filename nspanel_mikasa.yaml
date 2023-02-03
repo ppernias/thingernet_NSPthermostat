@@ -302,7 +302,7 @@ binary_sensor:
       - button.press: restart_${device_name}
 
   ##### Sleep Modus NSPanel Button #####
-  - platform: next
+  - platform: nextion
     name: ${device_name} Sleep Modus
     page_id: 3
     component_id: 2
