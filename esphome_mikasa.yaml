@@ -22,9 +22,9 @@ substitutions:
 packages:
   ##### download esphome code from Github
   remote_package:
-    url: https://github.com/ppernias/thingernet
+    url: https://github.com/ppernias/thingernet_thermostate
     ref: main
-    files: [nspanel_esphome.yaml]
+    files: [nspanel_mikasa.yaml]
     refresh: 300s
 
 ##### DO NOT CHANGE ANYTHING! #####
