@@ -302,7 +302,7 @@ binary_sensor:
       - button.press: restart_${device_name}
 
   ##### Sleep Modus NSPanel Button #####
-  - platform: nextion
+  - platform: next
     name: ${device_name} Sleep Modus
     page_id: 3
     component_id: 2
@@ -314,7 +314,7 @@ binary_sensor:
   - platform: nextion
     name: ${device_name} Hotwater Charge
     page_id: 0
-    component_id: 26
+    component_id: 25
     on_release:
       then: 
       - rtttl.play: "beep:d=32,o=7,b=100: d"
@@ -342,7 +342,7 @@ binary_sensor:
   - platform: nextion
     name: $device_name temp_up
     page_id: 0
-    component_id: 27
+    component_id: 26
     on_release:
       then: 
       - rtttl.play: "beep:d=32,o=7,b=100: d"  
@@ -365,7 +365,7 @@ binary_sensor:
   - platform: nextion
     name: $device_name temp_dn
     page_id: 0
-    component_id: 28
+    component_id: 27
     on_release:
       then: 
       - rtttl.play: "beep:d=32,o=7,b=100: d"  
