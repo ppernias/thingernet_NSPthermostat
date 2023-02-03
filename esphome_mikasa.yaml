@@ -1,20 +1,21 @@
 substitutions:
 ####### change me start #########
-  device_name: “termohjardin”
-  room: “hJardin” #(nomnre de la habitación)
-  climate: “climate.TermostatoHjardin” ##### Termostato (climate)
-  switch_heater: “switch.esp4ch_sr0_4” ##### interruptor SR (en climate)
-  switch_acs: “switch.recirculacion”  ##### Interruptor de la boba de recirculación ACS
-  ip: “192.168.1.113”
-  tft_url: “http://192.168.1.100:8123/local/nspanel_mikasa.tft”
-  v_offset: “0.0” #offset value for calibrate ntc
-  ha_hotwater_charge: “input_boolean.precalentar_acs” ##### interruptor (o boolean) que enciende agua caliente
-  t_sr: “sensor.esp4ch_sr0_t2”  #### sensor temperatura entrada a circuito SR de la habitación
-  t_acs: “sensor.d1_resol_solar_t_retorno_acs” ### sensor temperatura retorno ACS
-  t_outdoor: “sensor.w_temp_exterior”
-  web_password: “!secret tasmota_password”
-  secret_wifi_password: “!secret wifi_password”
-  secret_wifi_ssid: “!secret wifi_ssid”
+  device_name: termohjardin
+  room: hJardin #(nombre de la habitación)
+  climate: 'climate.TermostatoHjardin' ##### Termostato (climate)
+  switch_heater: 'switch.esp4ch_sr0_4' ##### interruptor SR (en climate)
+  switch_acs: 'switch.recirculacion'  ##### Interruptor de la boba de recirculación ACS
+  ip: 192.168.1.113
+  tft_url: http://192.168.1.100:8123/local/nspanel_mikasa.tft
+  v_offset: '-1.0' #offset value for calibrate ntc
+  ha_hotwater_charge: 'input_boolean.precalentar_acs' ##### interruptor (o boolean) que enciende agua caliente
+  t_sr: 'sensor.esp4ch_sr0_t2'  #### sensor temperatura entrada a circuito SR de la habitación
+  t_acs: 'sensor.d1_resol_solar_t_retorno_acs' ### sensor temperatura retorno ACS
+  t_outdoor: 'sensor.w_temp_exterior'
+  web_password: !secret tasmota_password
+  wifi_password: !secret wifi_password
+  wifi_ssid: !secret wifi_ssid
+  ota_password: !secret ota_password 
 ####### change me end #########
 
 ##### DO NOT CHANGE ANYTHING! #####

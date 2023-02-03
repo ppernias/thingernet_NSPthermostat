@@ -1,20 +1,3 @@
-#substitutions:
-#  device_name: DEVICENAME
-#  room: hJardin ROOMNAME
-#  climate: CLIMATEENTITYINHOMEASSISTANTTOASSOCIATEWITHNSPANEL
-#  switch_heater: SWITCHFORHEATER(SAMEASINCLIMATE)
-#  switch_acs: SWITCHFORRECIRCULATIONPUMP
-#  ip: IP(FIXED)TOASSIGN TO NSPANEL
-#  tft_url: http://YOURHOMEASSISTANTIP:8123/local/nspanel_mikasa.tft
-#  v_offset: offset value for calibrate ntc
-#  ha_hotwater_charge: BOOLEANTOSWITCHONHOTWATERRECIRCULATION
-#  t_sr: HEATFLOORTEMPERATUREMAINSENSOR
-#  t_acs: HOTWATERRECIRCULATIONTEMPERATURE
-#  t_outdoor: OUTDOORTEMPERATURESENSOR
-#  web_password: YOURWEBPASSWORD
-#  secret_wifi_password: !secret wifi_password
-#  secret_wifi_ssid: !secret wifi_ssid
-
 esphome:
   name: ${device_name}
 
@@ -36,8 +19,8 @@ external_components:
     refresh: 1h
 
 wifi:
-  ssid: $secret_wifi_ssid
-  password: $secret_wifi_password
+  ssid: $wifi_ssid
+  password: $wifi_password
   #fast_connect: on
   manual_ip:
     static_ip: $ip
@@ -74,7 +57,7 @@ button:
     id: restart_${device_name} 
 
 ota:
-  password: !secret ota_password
+  password: $ota_password
 
 api:
   services:
