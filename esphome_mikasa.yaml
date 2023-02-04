@@ -7,7 +7,7 @@ substitutions:
   switch_acs: ‘CHANGEME’  ##### SWITCH FOR HOT WATER RECIRCULATION
   ip: CHANGEME
   #tft_url: http://YOURHAIP:8123/local/nspanel_mikasa.tft
-  tft_url: https://raw.githubusercontent.com/ppernias/thingernet_thermostate/master/nspanel_mikasa.tft
+  tft_url: https://raw.githubusercontent.com/ppernias/thingernet_NSPthermostat/master/nspanel_mikasa.tft
   v_offset: ‘0.0’ ##### DEFAULT OFFSET VALUE
   ha_hotwater_charge: ‘CHANGEME’ ##### BOOLEAN SWITCH TO ASK FOR HOT WATER
   t_sr: ‘CHANGEME’  #### TEMPERATURE OF HEATING SYSTEM IMPULSION
@@ -24,7 +24,7 @@ substitutions:
 packages:
   ##### download esphome code from Github
   remote_package:
-    url: https://github.com/ppernias/thingernet_thermostate
+    url: https://github.com/ppernias/thingernet_NSPthermostat
     ref: master
     files: [nspanel_mikasa.yaml]
     refresh: 300s
