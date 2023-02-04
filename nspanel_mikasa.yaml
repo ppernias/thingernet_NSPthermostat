@@ -435,16 +435,6 @@ sensor:
       then:
         - lambda: 'id(disp1).set_component_text_printf("home.target_temp", "%.1f""\xb0", x);'
 
-  ##### get climate status from climate in HA #####
-  - platform: homeassistant
-    id: climate_status
-    entity_id: $climate
-    attribute: hvac_action
-    internal: true
-    on_value:
-      then:
-        - lambda: 'id(disp1).set_component_text_printf("home.sr_temp”, "%s", x);’
-
   ###### Display Brightness GET VALUE FROM NSPanel SLIDER #####
   - platform: nextion
     id: brightslider
@@ -487,15 +477,15 @@ sensor:
             switch.is_on: nextion_init
         - lambda: 'id(disp1).set_component_text_printf("home.outdoor_temp", "%.1f""\xb0", x);' 
 
-#  - platform: homeassistant
-#    id: t_sr_${device_name}
-#    entity_id: $t_sr
-#    internal: True
-#    on_value:
-#      then:
-#        - wait_until:
-#            switch.is_on: nextion_init
-#        - lambda: 'id(disp1).set_component_text_printf("home.sr_temp", "%.1f""\xb0", x);'    
+  - platform: homeassistant
+    id: t_sr_${device_name}
+    entity_id: $t_sr
+    internal: True
+    on_value:
+      then:
+        - wait_until:
+            switch.is_on: nextion_init
+        - lambda: 'id(disp1).set_component_text_printf("home.sr_temp", "%.1f""\xb0", x);'    
 
   - platform: homeassistant
     id: t_acs_${device_name}
