@@ -443,7 +443,7 @@ sensor:
     internal: true
     on_value:
       then:
-        - lambda: 'id(disp1).set_component_text_printf("home.sr_temp”, "%.1f""\xb0", x);'
+        - lambda: 'id(disp1).set_component_text_printf("home.sr_temp”, "%s", x);’
 
   ###### Display Brightness GET VALUE FROM NSPanel SLIDER #####
   - platform: nextion
