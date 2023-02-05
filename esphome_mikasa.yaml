@@ -1,5 +1,6 @@
 substitutions:
-####### change CHANGEME
+####### change CHANGEME #####
+  device_name: CHANGEME
   room: CHANGEME #(ROOM NAME)
   climate: ‘CHANGEME’ ##### Termostato (climate)
   switch_acs: ‘CHANGEME’  ##### Interruptor de la boba de recirculación ACS
