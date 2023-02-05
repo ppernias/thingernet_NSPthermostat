@@ -61,7 +61,6 @@ ota:
 
 api:
   services:
-
     ##### Service to update the HMI file #####
     - service: upload_tft
       then:
@@ -164,7 +163,7 @@ api:
             id(notification_timedate).publish_state(timedate.c_str());
             id(notification_header).publish_state(header.c_str());
             id(notification_message).publish_state(message.c_str());
-            id(disp1).send_command_printf("home.notif_status.pic=%i", 18);
+            id(disp1).send_command_printf("home.notif_status.pic=%i", 17);
         - switch.turn_on: notification_unread 
         - if:
             condition:
@@ -186,7 +185,7 @@ api:
             id(disp1).set_component_text_printf("notification.head", " ");
             id(disp1).set_component_text_printf("notification.body", " ");
             id(disp1).send_command_printf("page home");
-            id(disp1).send_command_printf("home.notif_status.pic=%i", 17);          
+            id(disp1).send_command_printf("home.notif_status.pic=%i", 16);          
         - switch.turn_off: notification_unread
 
     ##### Service to wake up screen #####
@@ -194,7 +193,6 @@ api:
       then:
         - lambda: |-
             id(disp1).send_command_printf("page home"); 
-
     ##### Service to play ringtone #####
     - service: play_rtttl
       variables:
@@ -211,13 +209,11 @@ time:
         minutes: /1
         then:
           - lambda: id(disp1).set_component_text_printf("home.time", "%02i:%02i", id(homeassistant_time).now().hour, id(homeassistant_time).now().minute);
-          - lambda: id(disp1).set_component_text_printf("home.date", "%2i/%02i/%0i", id(homeassistant_time).now().day_of_month, id(homeassistant_time).now().month, id(homeassistant_time).now().year);
     on_time_sync:
         then:
           - wait_until:
               switch.is_on: nextion_init
           - lambda: id(disp1).set_component_text_printf("home.time", "%02i:%02i", id(homeassistant_time).now().hour, id(homeassistant_time).now().minute);
-          - lambda: id(disp1).set_component_text_printf("home.date", "%2i/%02i/%0i", id(homeassistant_time).now().day_of_month, id(homeassistant_time).now().month, id(homeassistant_time).now().year);
 
 globals:
   ##### tset para target temperature #####
@@ -225,6 +221,18 @@ globals:
     type: float
     restore_value: no
     initial_value: '0.0'
+
+  ##### Save Display background for NSPanel reboot #####
+  - id: display_background_global
+    type: int
+    restore_value: true
+    initial_value: ${default_background}
+
+  ##### Temperature Correction #####
+  - id: temperature_correction_global
+    type: float
+    restore_value: true
+    initial_value: ${v_offset}
 
   ##### Save Display Brightness for NSPanel reboot #####
   - id: display_brightness_global
@@ -237,12 +245,6 @@ globals:
     type: int
     restore_value: true
     initial_value: '10'
-
-  ##### Temperature Correction #####
-  - id: temperature_correction_global
-    type: float
-    restore_value: true
-    initial_value: ${v_offset}
 
   ##### Save Display DIM Brightness for NSPanel reboot
   - id: sleep_modus_global
@@ -326,7 +328,7 @@ binary_sensor:
   - platform: nextion
     name: $device_name delete_notification
     page_id: 2
-    component_id: 8
+    component_id: 11
     on_release:
       then: 
       - homeassistant.service:
@@ -334,7 +336,7 @@ binary_sensor:
   - platform: nextion
     name: $device_name nodelete_notification
     page_id: 2
-    component_id: 7
+    component_id: 10
     on_release:
       then: 
         - lambda: id(disp1).send_command_printf("page home");
@@ -342,7 +344,7 @@ binary_sensor:
   - platform: nextion
     name: $device_name temp_up
     page_id: 0
-    component_id: 26
+    component_id: 27
     on_release:
       then: 
       - rtttl.play: "beep:d=32,o=7,b=100: d"  
@@ -365,7 +367,7 @@ binary_sensor:
   - platform: nextion
     name: $device_name temp_dn
     page_id: 0
-    component_id: 27
+    component_id: 26
     on_release:
       then: 
       - rtttl.play: "beep:d=32,o=7,b=100: d"  
@@ -420,6 +422,10 @@ sensor:
       reference_temperature: 25°C
       reference_resistance: 10kOhm
     filters:
+      - median:
+          window_size: 5
+          send_every: 5
+          send_first_at: 1
       - lambda: return x + id(temperature_correction_global);
     name: $device_name Temperature
     on_value:
@@ -478,16 +484,6 @@ sensor:
         - lambda: 'id(disp1).set_component_text_printf("home.outdoor_temp", "%.1f""\xb0", x);' 
 
   - platform: homeassistant
-    id: t_sr_${device_name}
-    entity_id: $t_sr
-    internal: True
-    on_value:
-      then:
-        - wait_until:
-            switch.is_on: nextion_init
-        - lambda: 'id(disp1).set_component_text_printf("home.sr_temp", "%.1f""\xb0", x);'    
-
-  - platform: homeassistant
     id: t_acs_${device_name}
     entity_id: ${t_acs}
     internal: True
@@ -495,9 +491,31 @@ sensor:
       then:
         - wait_until:
             switch.is_on: nextion_init
+        - lambda: |- 
+            if (x >= 35 ) {
+              id(disp1).set_component_font_color("home.hotwater_temp", "1032");
+            } else {
+              id(disp1).set_component_font_color("home.hotwater_temp", "0");
+            }           
         - lambda: 'id(disp1).set_component_text_printf("home.hotwater_temp", "%.1f""\xb0", x);'        
 
 text_sensor:
+
+  - platform: homeassistant
+    id: heat_status
+    name: ${device_name} heat_status
+    entity_id: $climate
+    attribute: hvac_action
+    on_value:
+      then:
+        - wait_until:
+            switch.is_on: nextion_init  
+        - lambda: |- 
+            if (strcmp(id(heat_status).state.c_str(),"heating") == 0) {
+              id(disp1).set_component_font_color("home.target_temp", "63488");
+            } else {
+              id(disp1).set_component_font_color("home.target_temp", "0");
+            }                
 
   ##### ESPhome version used to compile the app #####  
   - platform: version
@@ -559,57 +577,38 @@ text_sensor:
   ##### last click lightsettings page, the main action variable - push to HA #####
 
   - platform: homeassistant
-    id: sr_status_${device_name}
-    name: $device_name sr_status
-    entity_id: $switch_heater
-    on_value:      
-      then:
-        - lambda: |-
-            int symbol = 13;
-            if (id(sr_status_$device_name).state == "off") {
-              symbol = 13;
-            }
-              else {
-                symbol = 14;
-              }  
-            id(disp1).send_command_printf("home.sr_status.pic=%i", symbol);
-
-  - platform: homeassistant
     id: acs_status_${device_name}
     name: $device_name acs_status
     entity_id: $switch_acs
     on_value:      
       then:
         - lambda: |-
-            int symbol = 13;
+            int symbol = 14;
             if (id(acs_status_$device_name).state == "off") {
-              symbol = 15;
+              symbol = 14;
             }
               else {
-                symbol = 16;
+                symbol = 15;
               }  
             id(disp1).send_command_printf("home.acs_status.pic=%i", symbol);
-
-
   - platform: homeassistant
     id: termostato_status_${device_name}
     entity_id: $climate
     on_value:      
       then:
         - lambda: |-
-            int symbol = 12;
+            int symbol = 13;
             int symbol2 = 10;
             if (id(termostato_status_$device_name).state == "off") {
-              symbol = 12;
+              symbol = 13;
               symbol2 = 10;
             }
               else {
-                symbol = 11;
-                symbol2 = 9;
+                symbol = 12;
+                symbol2 = 11;
               }  
             id(disp1).send_command_printf("home.thermo_on.pic=%i", symbol);
-            id(disp1).send_command_printf("thermo_off.pic=%i", symbol2);        
-
+            id(disp1).send_command_printf("home.thermo_off.pic=%i", symbol2);        
 # switch: botones del panel para controlar reles
 switch:
 
@@ -766,6 +765,24 @@ number:
             id: temperature_correction_global
             value: !lambda 'return x;'
 
+  ##### nspanel background display #####
+  - platform: template
+    name: ${device_name} Background Display
+    id: background_display
+    entity_category: config
+    min_value: 0
+    max_value: 3
+    initial_value: 0
+    step: 1
+    restore_value: true
+    optimistic: true
+    set_action:
+      then:
+        - globals.set:
+            id: display_background_global
+            value: !lambda 'return x;'
+
+
 # Display Setup
 display:
   - platform: nextion
@@ -786,7 +803,8 @@ display:
         - number.set:
             id: display_dim_brightness
             value: !lambda 'return id(display_dim_brightness_global);'
-        - lambda: id(disp1).set_component_text_printf("home.zona", "%s", "${room}");    
+        - lambda: 'id(disp1).send_command_printf("home.backgrd_image.pic=%i", id(display_background_global));'    
+        - lambda: id(disp1).set_component_text_printf("home.zona", "%s", "${room}");           
         - lambda: id(disp1).set_component_text_printf("settings.a03", "%i", id(display_brightness_global));
         - lambda: id(disp1).set_component_text_printf("settings.a04", "%i", id(display_dim_brightness_global));
         - lambda: id(disp1).send_command_printf("settings.brightslider.val=%i", id(display_brightness_global));
@@ -802,4 +820,4 @@ display:
         - switch.template.publish:
             id: nextion_init
             state: on
-        - lambda: id(disp1).send_command_printf("page 0");    
+        - lambda: id(disp1).send_command_printf("page 0");       
