@@ -8,7 +8,7 @@ substitutions:
   v_offset: '0.0' #offset value for calibrate ntc
   default_background: '0'
   #tft_url: http://192.168.1.100:8123/local/nspanel_mikasa.tft #### for local download
-  tft_url: https://raw.githubusercontent.com/ppernias/thingernet_NSPthermostat/master/nspanel_mikasa.tft. #### for remote download
+  tft_url: https://raw.githubusercontent.com/ppernias/thingernet_NSPthermostat/master/nspanel_mikasa.tft #### for remote download
 #### general for esphome
   web_password: !secret tasmota_password
   wifi_password: !secret wifi_password
