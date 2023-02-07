@@ -321,7 +321,7 @@ binary_sensor:
       then: 
       - rtttl.play: "beep:d=32,o=7,b=100: d"
       - homeassistant.service:
-          service: input_boolean.toggle
+          service: switch.toggle
           data: 
             entity_id: ${ha_hotwater_charge} 
 

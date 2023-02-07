@@ -15,7 +15,7 @@ substitutions:
   wifi_ssid: !secret wifi_ssid
   ota_password: !secret ota_password 
 #### for each HA installaton  
-  switch_acs: ‘CHANGEME’  ##### Interruptor de la boba de recirculación ACS
+  switch_acs: ‘CHANGEME’  ##### Interruptor de la bomba de recirculación ACS
   ha_hotwater_charge: ‘CHANGEME’ ##### interruptor (o boolean) que enciende agua caliente
   t_acs: ‘CHANGEME’ ### sensor temperatura retorno ACS
   t_outdoor: ‘CHANGEME’
