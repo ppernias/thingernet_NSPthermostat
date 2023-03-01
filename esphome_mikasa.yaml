@@ -5,6 +5,9 @@ substitutions:
   room: CHANGEME #(ROOM NAME)
   climate: ‘CHANGEME’ ##### Termostato (climate)
   ip: CHANGEME
+  gateway: CHANGEME
+  subnet: CHANGEME
+  dns1: CHANGEME
   v_offset: '0.0' #offset value for calibrate ntc
   default_background: '0'
   #tft_url: http://192.168.1.100:8123/local/nspanel_mikasa.tft #### for local download

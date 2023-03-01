@@ -24,9 +24,9 @@ wifi:
   #fast_connect: on
   manual_ip:
     static_ip: $ip
-    gateway: 192.168.1.1
-    subnet: 255.255.255.0
-    dns1: 8.8.8.8
+    gateway: $gateway
+    subnet: $subnet
+    dns1: $dns1
 
 logger:
   baud_rate: 0
