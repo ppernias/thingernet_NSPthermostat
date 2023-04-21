@@ -22,11 +22,11 @@ wifi:
   ssid: $wifi_ssid
   password: $wifi_password
   #fast_connect: on
-  manual_ip:
-    static_ip: $ip
-    gateway: $gateway
-    subnet: $subnet
-    dns1: $dns1
+  #manual_ip:
+  #  static_ip: $ip
+  #  gateway: $gateway
+  #  subnet: $subnet
+  #  dns1: $dns1
 
 logger:
   baud_rate: 0
