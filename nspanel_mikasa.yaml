@@ -54,7 +54,7 @@ uart:
 button:
   - platform: restart
     name: ${device_name}_restart 
-    id: restart_${device_name}_
+    id: restart_${device_name}
 
 ota:
   password: $ota_password
