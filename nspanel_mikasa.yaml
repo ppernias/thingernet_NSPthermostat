@@ -54,7 +54,7 @@ uart:
 button:
   - platform: restart
     name: ${device_name}_restart 
-    id: restart_${device_name}
+    id: ${device_name}
 
 ota:
   password: $ota_password
@@ -301,7 +301,7 @@ binary_sensor:
     component_id: 7
     internal: true
     on_click:
-      - button.press: restart_
+      - button.press: restart
 
   ##### Sleep Modus NSPanel Button #####
   - platform: nextion
